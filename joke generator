@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joke Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: lightgray;
+        }
+
+        .container {
+            text-align: center;
+            padding: 20px;
+            border: 2px solid gray;
+            background-color: white;
+            border-radius: 5px;
+            width: 80%;
+            max-width: 400px;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: darkblue;
+        }
+
+        #joke {
+            font-size: 16px;
+            margin: 20px 0;
+            color: darkslategray;
+        }
+
+        #characterCount {
+            font-size: 14px;
+            color: dimgray;
+        }
+
+        button {
+            padding: 10px;
+            margin: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 3px;
+            color: white;
+            background-color: steelblue;
+        }
+
+        #clearButton {
+            background-color: indianred;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Joke Generator</h1>
+        <p id="joke">Click "Get Joke" to see a random joke!</p>
+        <div id="characterCount"></div>
+        <button onclick="getJoke()">Get Joke</button>
+        <button id="clearButton" onclick="clearJoke()">Clear</button>
+    </div>
+
+    <script>
+        function getJoke() {
+            fetch("https://v2.jokeapi.dev/joke/Any")
+                .then(response => response.json())
+                .then(data => {
+                    let jokeText = data.type === "single" ? data.joke : data.setup + " " + data.delivery;
+                    document.getElementById("joke").innerText = jokeText;
+                    document.getElementById("characterCount").innerText = "Character count: " + jokeText.length;
+                })
+                .catch(error => {
+                    document.getElementById("joke").innerText = "Error: Unable to load joke.";
+                    document.getElementById("characterCount").innerText = "";
+                });
+        }
+
+        function clearJoke() {
+            document.getElementById("joke").innerText = "Click 'Get Joke' to see a random joke!";
+            document.getElementById("characterCount").innerText = "";
+        }
+    </script>
+</body>
+</html>
